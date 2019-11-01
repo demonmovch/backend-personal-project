@@ -8,4 +8,4 @@ export {
     validationLogger,
 } from './loggers';
 export { ValidationError, NotFoundError } from './errors';
-export { getPort, getPassword, getDbName, getDbUrl } from './env';
+export { getPort, getPassword, getDbName, getDbUrl, getDbPort, getDbCredentials } from './env';

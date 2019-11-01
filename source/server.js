@@ -20,15 +20,15 @@ const debug = dg('server:init');
 const MongoStore = connectMongo(session);
 
 const sessionOptions = {
-    key: 'user',
-    secret: getPassword(),
-    resave: false,
-    rolling: true,
+    key:               'user',
+    secret:            getPassword(),
+    resave:            false,
+    rolling:           true,
     saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
-    cookie: {
+    store:             new MongoStore({ mongooseConnection: mongoose.connection }),
+    cookie:            {
         httpOnly: true,
-        maxAge: 15 * 60 * 1000,
+        maxAge:   15 * 60 * 1000,
     },
 };
 
@@ -51,8 +51,8 @@ app.use(session(sessionOptions));
 
 if (process.env.NODE_ENV === 'development') {
     app.use((req, res, next) => {
-        const body =
-            req.method === 'GET'
+        const body
+            = req.method === 'GET'
                 ? 'Body not supported for GET'
                 : JSON.stringify(req.body, null, 2);
 
