@@ -6,9 +6,6 @@ import connectMongo from 'connect-mongo';
 import bodyParser from 'body-parser';
 import dg from 'debug';
 
-// Routes
-import * as domains from './domains';
-
 // Instruments
 import { getPassword, NotFoundError } from './helpers';
 
@@ -60,8 +57,6 @@ if (process.env.NODE_ENV === 'development') {
         next();
     });
 }
-
-app.use('/auth', domains.auth);
 
 app.use('*', (req, res, next) => {
     const error = new NotFoundError(
