@@ -3,13 +3,14 @@ import express from 'express';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import connectMongo from 'connect-mongo';
+import bodyParser from 'body-parser';
 import dg from 'debug';
 
 // Routes
 import * as domains from './domains';
 
 // Instruments
-import { requireJsonContent, getPassword, NotFoundError } from './helpers';
+import { getPassword, NotFoundError } from './helpers';
 
 // Initialize DB connection
 import './db';
@@ -19,15 +20,15 @@ const debug = dg('server:init');
 const MongoStore = connectMongo(session);
 
 const sessionOptions = {
-    key:               'user',
-    secret:            getPassword(),
-    resave:            false,
-    rolling:           true,
+    key: 'user',
+    secret: getPassword(),
+    resave: false,
+    rolling: true,
     saveUninitialized: false,
-    store:             new MongoStore({ mongooseConnection: mongoose.connection }),
-    cookie:            {
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    cookie: {
         httpOnly: true,
-        maxAge:   15 * 60 * 1000,
+        maxAge: 15 * 60 * 1000,
     },
 };
 
@@ -42,24 +43,25 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(
-    express.json({
-        limit: '10kb',
+    bodyParser.json({
+        limit: '5kb',
     }),
 );
 app.use(session(sessionOptions));
-app.use(requireJsonContent);
 
 if (process.env.NODE_ENV === 'development') {
     app.use((req, res, next) => {
-        const body
-            = req.method === 'GET' ? 'Body not supported for GET' : JSON.stringify(req.body, null, 2);
+        const body =
+            req.method === 'GET'
+                ? 'Body not supported for GET'
+                : JSON.stringify(req.body, null, 2);
 
         debug(`${req.method}\n${body}`);
         next();
     });
 }
 
-app.use('/api/auth', domains.auth);
+app.use('/auth', domains.auth);
 
 app.use('*', (req, res, next) => {
     const error = new NotFoundError(
