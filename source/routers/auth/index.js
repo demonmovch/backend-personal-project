@@ -3,7 +3,7 @@ import express from 'express';
 
 // Instruments
 import { login } from './route';
-import { limiter } from '../../utils';
+import { limiter } from '../../helpers';
 
 export const router = express.Router();
 

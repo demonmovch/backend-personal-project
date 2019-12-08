@@ -14,7 +14,7 @@ export const getByHash = async (req, res) => {
     const model = new Products({ hash: productHash });
     const data = await model.getByHash();*/
 
-    const data;
+    const data = {};
     res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -29,8 +29,7 @@ export const updateByHash = async (req, res) => {
     const model = new Products({ hash: productHash, payload: req.body });
     const data = await model.updateByHash();*/
 
-
-    const data;
+    const data = {};
     res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });

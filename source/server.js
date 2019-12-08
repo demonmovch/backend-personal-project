@@ -10,13 +10,17 @@ import dg from 'debug';
 import { getPassword, NotFoundError } from './helpers';
 
 // Routers
-import { auth, staff, customers, products } from './routers';
+import { auth, staff, customers, products, orders } from './routers';
 
 // Initialize DB connection
 import './db';
 
+const app = express();
+const debug = dg('server:init');
+const MongoStore = connectMongo(session);
+
 const sessionOptions = {
-  key: 'user',
+  key: 'isAuthenticated',
   secret: getPassword(),
   resave: false,
   rolling: true,
@@ -27,10 +31,6 @@ const sessionOptions = {
     maxAge: 15 * 60 * 1000,
   },
 };
-
-const app = express();
-const debug = dg('server:init');
-const MongoStore = connectMongo(session);
 
 app.use(
   bodyParser.json({
@@ -65,6 +65,7 @@ app.use('/', auth);
 app.use('/staff', staff);
 app.use('/customers', customers);
 app.use('/products', products);
+app.use('/orders', orders);
 app.use('*', (req, res, next) => {
   const error = new NotFoundError(
     `Can not find right route for method ${req.method} and path ${req.originalUrl}`,
