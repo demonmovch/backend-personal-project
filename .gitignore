@@ -27,6 +27,3 @@ coverage
 # folders
 build/
 logs/
-
-# ENVs
-.env
