@@ -1,9 +1,9 @@
 // Core
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 // Instruments
-import { staff } from '../odm';
-import { NotFoundError } from '../helpers/errors';
+import { staff } from "../odm";
+import { NotFoundError } from "../helpers/errors";
 
 export class Staff {
   constructor(data) {
@@ -11,6 +11,8 @@ export class Staff {
   }
 
   async create() {
+    const [fName, lName] = this.data.name.split(" ");
+
     const data = await staff.create(this.data);
 
     return data;

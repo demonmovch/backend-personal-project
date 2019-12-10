@@ -1,3 +1,4 @@
-export { createEmployee } from './createEmployee';
-export { createProduct } from './createProduct';
-export { createCustomer } from './createCustomer';
+export { createStaff } from "./createStaff";
+export { createProduct } from "./createProduct";
+export { createCustomer } from "./createCustomer";
+export { createOrder } from "./createOrder";

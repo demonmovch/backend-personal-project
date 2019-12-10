@@ -1,10 +1,10 @@
 // Core
-import dg from 'debug';
+import dg from "debug";
 
 // Instruments
-//import { Staff } from '../../controllers';
+import { Staff } from "../../controllers";
 
-const debug = dg('router:staff');
+const debug = dg("router:staff");
 
 export const get = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
@@ -25,10 +25,9 @@ export const post = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const model = new Staff(req.body);
-    const data = await model.create();*/
+    const model = new Staff(req.body);
+    const data = await model.create();
 
-    const data = {};
     res.status(201).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });
