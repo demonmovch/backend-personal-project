@@ -10,11 +10,10 @@ export const getByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { customerHash } = req.params;
+    const { customerHash } = req.params;
     const model = new Customers({ hash: customerHash });
-    const data = await model.getByHash();*/
+    const data = await model.getByHash();
 
-    const data = {};
     res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -25,11 +24,10 @@ export const updateByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { customerHash } = req.params;
+    const { customerHash } = req.params;
     const model = new Customers({ hash: customerHash, payload: req.body });
-    const data = await model.updateByHash();*/
+    const data = await model.updateByHash();
 
-    const data = {};
     res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -40,10 +38,10 @@ export const removeByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { customerHash } = req.params;
+    const { customerHash } = req.params;
     const model = new Customers({ hash: customerHash });
 
-    await model.removeByHash();*/
+    await model.removeByHash();
 
     res.sendStatus(204);
   } catch (error) {

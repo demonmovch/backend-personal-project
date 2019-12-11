@@ -10,11 +10,10 @@ export const getByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { productHash } = req.params;
+    const { productHash } = req.params;
     const model = new Products({ hash: productHash });
-    const data = await model.getByHash();*/
+    const data = await model.getByHash();
 
-    const data = {};
     res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -25,11 +24,10 @@ export const updateByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { productHash } = req.params;
+    const { productHash } = req.params;
     const model = new Products({ hash: productHash, payload: req.body });
-    const data = await model.updateByHash();*/
+    const data = await model.updateByHash();
 
-    const data = {};
     res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -40,10 +38,10 @@ export const removeByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { productHash } = req.params;
+    const { productHash } = req.params;
     const model = new Products({ hash: productHash });
 
-    await model.removeByHash();*/
+    await model.removeByHash();
 
     res.sendStatus(204);
   } catch (error) {

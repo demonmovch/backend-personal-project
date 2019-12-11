@@ -1,4 +1,4 @@
-export const createEmployee = {
+export const createCustomer = {
   type: 'object',
   properties: {
     name: {

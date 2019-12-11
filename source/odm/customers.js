@@ -1,6 +1,6 @@
 // Core
-import mongoose from "mongoose";
-import v4 from "uuid/v4";
+import mongoose from 'mongoose';
+import v4 from 'uuid/v4';
 
 const schema = new mongoose.Schema(
   {
@@ -8,55 +8,56 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      default: () => v4()
+      default: () => v4(),
     },
     name: {
       first: {
         type: String,
-        required: true
+        required: true,
       },
       last: {
         type: String,
-        required: true
-      }
+        required: true,
+      },
     },
     emails: [
       {
         email: {
           type: String,
           unique: true,
-          required: true
+          required: true,
         },
-        primary: Boolean
-      }
+        primary: Boolean,
+      },
     ],
     phones: [
       {
         phone: {
           type: String,
-          required: true
+          required: true,
         },
-        primary: Boolean
-      }
+        primary: Boolean,
+      },
     ],
     city: String,
     country: String,
     password: {
       type: String,
       select: false,
-      required: true
-    }
+      required: true,
+    },
   },
-  { timestamp: { createdAt: "created", updatedAt: "modified" } }
+  { timestamp: { createdAt: 'created', updatedAt: 'modified' } }
 );
-schema.index({ "name.first": 1, "name.last": 1 }, { name: "flName" });
+
+schema.index({ 'name.first': 1, 'name.last': 1 }, { name: 'flName' });
 schema.index({
-  "name.first": "text",
-  "name.last": "text",
-  city: "text",
-  country: "text"
+  'name.first': 'text',
+  'name.last': 'text',
+  city: 'text',
+  country: 'text',
 });
 
-export const customers = mongoose.model("customers", schema);
+export const customers = mongoose.model('customers', schema);
 
 customers.createIndexes();

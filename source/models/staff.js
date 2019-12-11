@@ -18,14 +18,13 @@ export class Staff {
         first: fName,
         last: lName,
       },
-      emails: [{ email: {}, primary: true }],
-      phones: [{ phone: {}, primary: true }],
-      password: '',
-      role: '',
-      disabled: '',
+      emails: [{ email: this.data.email, primary: true }],
+      phones: [{ phone: this.data.phone, primary: true }],
+      password: this.data.password,
+      role: this.data.role,
     };
 
-    const data = await staff.create(this.data);
+    const data = await staff.create(staffSchema);
 
     return data;
   }

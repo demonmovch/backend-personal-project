@@ -11,10 +11,10 @@ import { createProduct } from '../../schemas';
 
 export const router = express.Router();
 
-router.get('/', [authenticate, limiter(5, 60 * 1000)], get);
-router.post('/', [validator(createProduct)], post);
+router.get('/', [limiter(5, 60 * 1000)], get);
+router.post('/', [authenticate, validator(createProduct)], post);
 
-router.get('/:productHash', [authenticate], getByHash);
+router.get('/:productHash', getByHash);
 router.put('/:productHash', [authenticate], updateByHash);
 router.delete('/:productHash', [authenticate], removeByHash);
 

@@ -4,7 +4,7 @@ import { Customers as CustomersModel } from '../models';
 export class Customers {
   constructor(data) {
     this.models = {
-      staff: new CustomersModel(data),
+      customers: new CustomersModel(data),
     };
   }
 

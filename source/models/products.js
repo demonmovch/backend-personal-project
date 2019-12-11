@@ -13,70 +13,48 @@ export class Products {
     return data;
   }
 
-  /* async getAll() {
-        const { page: oPage, size: oSize } = this.data;
+  async getAll() {
+    const data = await products
+      .find({})
+      .sort('-created')
+      .lean();
 
-        const { page, size } = validatePaginationObj({
-            page: oPage,
-            size: oSize,
-        });
-        const total = await products.countDocuments();
-        const offset = (page - 1) * size;
+    return data;
+  }
 
-        const data = await products
-            .find({})
-            .sort('-created')
-            .skip(offset)
-            .limit(size)
-            .select('-__v -id')
-            .lean();
+  async getByHash() {
+    const { hash } = this.data;
 
-        return {
-            data,
-            meta: {
-                total,
-                page,
-                size,
-            },
-        };
+    const data = await products.findOne({ hash }).lean();
+
+    if (!data) {
+      throw new NotFoundError(`can not find document with hash ${hash}`);
     }
 
-    async getByHash() {
-        const { hash } = this.data;
+    return data;
+  }
 
-        const data = await products
-            .findOne({ hash })
-            .select('-__v -id')
-            .lean();
+  async updateByHash() {
+    const { hash, payload } = this.data;
 
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
+    const data = await products.findOneAndUpdate({ hash }, payload);
 
-        return data;
+    if (!data) {
+      throw new NotFoundError(`can not find document with hash ${hash}`);
     }
 
-    async updateByHash() {
-        const { hash, payload } = this.data;
+    return data;
+  }
 
-        const data = await products.findOneAndUpdate({ hash }, payload);
+  async removeByHash() {
+    const { hash } = this.data;
 
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
+    const data = await products.findOneAndDelete({ hash });
 
-        return data;
+    if (!data) {
+      throw new NotFoundError(`can not find document with hash ${hash}`);
     }
 
-    async removeByHash() {
-        const { hash } = this.data;
-
-        const data = await products.findOneAndDelete({ hash });
-
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
-
-        return data;
-    }*/
+    return data;
+  }
 }

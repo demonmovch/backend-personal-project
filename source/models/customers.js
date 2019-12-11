@@ -8,75 +8,67 @@ export class Customers {
   }
 
   async create() {
-    const data = await customers.create(this.data);
+    const [fName, lName] = this.data.name.split(' ');
+
+    const customersSchema = {
+      name: {
+        first: fName,
+        last: lName,
+      },
+      emails: [{ email: this.data.email, primary: true }],
+      phones: [{ phone: this.data.phone, primary: true }],
+      city: this.data.city,
+      country: this.data.country,
+      password: this.data.password,
+    };
+
+    const data = await customers.create(customersSchema);
 
     return data;
   }
 
-  /* async getAll() {
-        const { page: oPage, size: oSize } = this.data;
+  async getAll() {
+    const data = await customers
+      .find({})
+      .sort('-created')
+      .lean();
 
-        const { page, size } = validatePaginationObj({
-            page: oPage,
-            size: oSize,
-        });
-        const total = await customers.countDocuments();
-        const offset = (page - 1) * size;
+    return data;
+  }
 
-        const data = await customers
-            .find({})
-            .sort('-created')
-            .skip(offset)
-            .limit(size)
-            .select('-__v -id')
-            .lean();
+  async getByHash() {
+    const { hash } = this.data;
 
-        return {
-            data,
-            meta: {
-                total,
-                page,
-                size,
-            },
-        };
+    const data = await customers.findOne({ hash }).lean();
+
+    if (!data) {
+      throw new NotFoundError(`can not find document with hash ${hash}`);
     }
 
-    async getByHash() {
-        const { hash } = this.data;
+    return data;
+  }
 
-        const data = await customers
-            .findOne({ hash })
-            .select('-__v -id')
-            .lean();
+  async updateByHash() {
+    const { hash, payload } = this.data;
 
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
+    const data = await customers.findOneAndUpdate({ hash }, payload);
 
-        return data;
+    if (!data) {
+      throw new NotFoundError(`can not find document with hash ${hash}`);
     }
 
-    async updateByHash() {
-        const { hash, payload } = this.data;
+    return data;
+  }
 
-        const data = await customers.findOneAndUpdate({ hash }, payload);
+  async removeByHash() {
+    const { hash } = this.data;
 
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
+    const data = await customers.findOneAndDelete({ hash });
 
-        return data;
+    if (!data) {
+      throw new NotFoundError(`can not find document with hash ${hash}`);
     }
 
-    async removeByHash() {
-        const { hash } = this.data;
-
-        const data = await customers.findOneAndDelete({ hash });
-
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
-
-        return data;
-    }*/
+    return data;
+  }
 }
