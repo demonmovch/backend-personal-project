@@ -1,6 +1,6 @@
 // Instruments
-import { orders } from '../odm';
-import { NotFoundError } from '../helpers/errors';
+import { orders, products, customers } from "../odm";
+import { NotFoundError } from "../helpers/errors";
 
 export class Orders {
   constructor(data) {
@@ -8,75 +8,134 @@ export class Orders {
   }
 
   async create() {
+    const { uid, pid, count } = this.data;
+
+    const customer = await customers.findOne({ hash: uid });
+
+    if (!customer) {
+      throw new NotFoundError(`can not find customer with hash ${uid}`);
+    }
+
+    const product = await products.findOne({ hash: pid });
+
+    if (!product) {
+      throw new NotFoundError(`can not find product with hash ${pid}`);
+    }
+
+    if (product.total < count) {
+      throw new Error(
+        "we do not have such number of this product in the store"
+      );
+    }
+
     const data = await orders.create(this.data);
+
+    await products.findOneAndUpdate(
+      { hash: pid },
+      { total: product.total - count },
+      {
+        new: true,
+        upsert: true
+      }
+    );
 
     return data;
   }
 
-  /* async getAll() {
-        const { page: oPage, size: oSize } = this.data;
+  async getAll() {
+    const data = await orders
+      .find({})
+      .sort("-created")
+      .lean();
 
-        const { page, size } = validatePaginationObj({
-            page: oPage,
-            size: oSize,
-        });
-        const total = await orders.countDocuments();
-        const offset = (page - 1) * size;
+    return data;
+  }
 
-        const data = await orders
-            .find({})
-            .sort('-created')
-            .skip(offset)
-            .limit(size)
-            .select('-__v -id')
-            .lean();
+  async getByHash() {
+    const { hash } = this.data;
 
-        return {
-            data,
-            meta: {
-                total,
-                page,
-                size,
-            },
-        };
+    const data = await orders.findOne({ hash }).lean();
+
+    if (!data) {
+      throw new NotFoundError(`can not find order with hash ${hash}`);
     }
 
-    async getByHash() {
-        const { hash } = this.data;
+    return data;
+  }
 
-        const data = await orders
-            .findOne({ hash })
-            .select('-__v -id')
-            .lean();
+  async updateByHash() {
+    const { hash, count } = this.data;
 
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
+    const order = await orders.findOne({ hash }).lean();
 
-        return data;
+    if (!order) {
+      throw new NotFoundError(`can not find order with hash ${hash}`);
     }
 
-    async updateByHash() {
-        const { hash, payload } = this.data;
+    const product = await products.findOneAndUpdate(
+      { hash: order.pid },
+      { $inc: { total: order.count } },
+      {
+        new: true,
+        upsert: true
+      }
+    );
 
-        const data = await orders.findOneAndUpdate({ hash }, payload);
-
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
-
-        return data;
+    if (product.total < count) {
+      throw new Error(
+        "we do not have such number of this product in the store"
+      );
     }
 
-    async removeByHash() {
-        const { hash } = this.data;
+    await products.findOneAndUpdate(
+      { hash: order.pid },
+      { $inc: { total: -count } },
+      {
+        new: true,
+        upsert: true
+      }
+    );
 
-        const data = await orders.findOneAndDelete({ hash });
+    const data = await orders.findOneAndUpdate(
+      { hash: hash },
+      { count: count },
+      {
+        new: true,
+        upsert: true
+      }
+    );
 
-        if (!data) {
-            throw new NotFoundError(`can not find document with hash ${hash}`);
-        }
+    if (!data) {
+      throw new NotFoundError(`can not find document with hash ${hash}`);
+    }
 
-        return data;
-    }*/
+    return data;
+  }
+
+  async removeByHash() {
+    const { hash } = this.data;
+
+    const order = await orders.findOne({ hash: hash }).lean();
+
+    if (!order) {
+      throw new NotFoundError(`can not find order with hash ${hash}`);
+    }
+
+    await products.findOneAndUpdate(
+      { hash: order.pid },
+      { $inc: { total: order.count } },
+      {
+        new: true,
+        upsert: true
+      }
+    );
+
+    const data = await orders.findOneAndDelete({ hash });
+
+    if (!data) {
+      throw new NotFoundError(`can not find document with hash ${hash}`);
+    }
+
+    return data;
+  }
 }

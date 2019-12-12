@@ -1,6 +1,6 @@
 // Core
-import mongoose from 'mongoose';
-import v4 from 'uuid/v4';
+import mongoose from "mongoose";
+import v4 from "uuid/v4";
 
 const schema = new mongoose.Schema(
   {
@@ -8,26 +8,26 @@ const schema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      default: () => v4(),
+      default: () => v4()
     },
     title: {
       type: String,
-      required: true,
+      required: true
     },
     description: String,
     price: {
-      type: String,
-      required: true,
+      type: Number,
+      required: true
     },
-    discount: String,
+    discount: Number,
     total: {
-      type: String,
-      required: true,
-    },
+      type: Number,
+      required: true
+    }
   },
-  { timestamp: { createdAt: 'created', updatedAt: 'modified' } }
+  { timestamp: { createdAt: "created", updatedAt: "modified" } }
 );
 
-export const products = mongoose.model('products', schema);
+export const products = mongoose.model("products", schema);
 
 products.createIndexes();

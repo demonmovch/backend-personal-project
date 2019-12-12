@@ -1,10 +1,10 @@
 // Instruments
-import { Orders as OrdersModel } from '../models';
+import { Orders as OrdersModel } from "../models";
 
 export class Orders {
   constructor(data) {
     this.models = {
-      orders: new OrdersModel(data),
+      orders: new OrdersModel(data)
     };
   }
 

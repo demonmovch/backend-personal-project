@@ -1,19 +1,19 @@
-export const createProduct = {
-  type: 'object',
+export const createOrder = {
+  type: "object",
   properties: {
     uid: {
-      type: 'string',
+      type: "string"
     },
     pid: {
-      type: 'string',
+      type: "string"
     },
     count: {
-      type: 'number',
+      type: "number"
     },
     comment: {
-      type: 'string',
-    },
+      type: "string"
+    }
   },
-  required: ['uid', 'pid', 'count', 'comment'],
-  additionalProperties: false,
+  required: ["uid", "pid", "count", "comment"],
+  additionalProperties: false
 };

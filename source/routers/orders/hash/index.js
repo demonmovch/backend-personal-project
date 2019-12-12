@@ -1,20 +1,19 @@
 // Core
-import dg from 'debug';
+import dg from "debug";
 
 // Instruments
-import { Orders } from '../../../controllers';
+import { Orders } from "../../../controllers";
 
-const debug = dg('router:orders:hash');
+const debug = dg("router:orders:hash");
 
 export const getByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { orderHash } = req.params;
+    const { orderHash } = req.params;
     const model = new Orders({ hash: orderHash });
-    const data = await model.getByHash();*/
+    const data = await model.getByHash();
 
-    const data = {};
     res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -25,11 +24,10 @@ export const updateByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { orderHash } = req.params;
-    const model = new Orders({ hash: orderHash, payload: req.body });
-    const data = await model.updateByHash();*/
+    const { orderHash } = req.params;
+    const model = new Orders({ hash: orderHash, count: req.body.count });
+    const data = await model.updateByHash();
 
-    const data = {};
     res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -40,10 +38,10 @@ export const removeByHash = async (req, res) => {
   debug(`${req.method} - ${req.originalUrl}`);
 
   try {
-    /*const { orderHash } = req.params;
+    const { orderHash } = req.params;
     const model = new Orders({ hash: orderHash });
 
-    await model.removeByHash();*/
+    await model.removeByHash();
 
     res.sendStatus(204);
   } catch (error) {

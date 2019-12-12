@@ -1,25 +1,32 @@
 // Core
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import v4 from "uuid/v4";
 
 const schema = new mongoose.Schema(
   {
-    uid: {
+    hash: {
       type: String,
       required: true,
+      unique: true,
+      default: () => v4()
+    },
+    uid: {
+      type: String,
+      required: true
     },
     pid: {
       type: String,
-      required: true,
+      required: true
     },
     count: {
       type: Number,
-      required: true,
+      required: true
     },
-    comment: String,
+    comment: String
   },
-  { timestamp: { createdAt: 'created', updatedAt: 'modified' } }
+  { timestamp: { createdAt: "created", updatedAt: "modified" } }
 );
 
-export const orders = mongoose.model('orders', schema);
+export const orders = mongoose.model("orders", schema);
 
 orders.createIndexes();
